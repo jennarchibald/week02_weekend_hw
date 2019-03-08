@@ -9,8 +9,6 @@ class TestVenue < Minitest::Test
 
   def setup
 
-    @venue1 = Venue.new(5)
-
     @guest1 = Guest.new("Jenn", 100)
     @guest2 = Guest.new("Bob", 1)
 
@@ -24,6 +22,10 @@ class TestVenue < Minitest::Test
     @room1 = Room.new("Room 1", @songs, 6)
     @room2 = Room.new("Room 1", @songs, 8)
     @room3 = Room.new("Room 1", @songs, 8)
+
+    @rooms = [@room1, @room2, @room3]
+
+    @venue1 = Venue.new(5, @rooms)
 
   end
 
@@ -42,22 +44,26 @@ class TestVenue < Minitest::Test
 
   def test_charge_entry_fee__guest_can_pay
     result = @venue1.charge_entry_fee(@guest1)
-    assert_equal(5, result)
+    assert_equal(true, @guest1.wristband)
+    assert_equal(5, @venue1.how_much_in_till)
   end
 
   def test_charge_entry_fee__guest_cant_pay
     result = @venue1.charge_entry_fee(@guest2)
-    assert_equal(0, result)
+    assert_equal(false, @guest2.wristband)
+    assert_equal(0, @venue1.how_much_in_till)
   end
 
   def test_venue_has_rooms
-
+    assert_equal([@room1, @room2, @room3], @venue1.rooms)
   end
 
-  # def test_new_guest
-  #   @venue1
-  #
-  # end
+  def test_give_guest_wristband
+    @venue1.give_guest_wristband(@guest1)
+    assert_equal(true, @guest1.wristband)
+  end
+
+
 
 
 

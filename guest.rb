@@ -1,12 +1,15 @@
 class Guest
 
   attr_reader :name
+  attr_accessor :wristband
 
   def initialize(name, money)
 
     @name = name
 
     @money = money
+
+    @wristband = false
 
   end
 

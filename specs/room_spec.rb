@@ -3,6 +3,7 @@ require("Minitest/rg")
 require_relative("../room")
 require_relative("../song")
 require_relative("../guest")
+require_relative("../venue")
 
 
 class TestRoom < Minitest::Test
@@ -16,6 +17,8 @@ class TestRoom < Minitest::Test
     @guest5 = Guest.new("Mark", 90)
     @guest6 = Guest.new("Charlie", 90)
     @guest7 = Guest.new("Grant", 90)
+    @guest8 = Guest.new("Bob", 1)
+
 
     @song1 = Song.new("Mr Brightside", "The Killers")
     @song2 = Song.new("Hard Times", "Paramore")
@@ -25,6 +28,13 @@ class TestRoom < Minitest::Test
     @songs = [@song1, @song2, @song3]
 
     @room1 = Room.new("Room 1", @songs, 6)
+    @room2 = Room.new("Room 1", @songs, 4)
+
+    @rooms = [@room1, @room2]
+
+    @venue1 = Venue.new(5, @rooms)
+
+
 
   end
 
@@ -59,12 +69,20 @@ class TestRoom < Minitest::Test
     assert_equal([], @room1.playlist)
   end
 
-  def test_check_in_guest
+  def test_check_in_guest__guest_has_wristband
+    @venue1.charge_entry_fee(@guest1)
     @room1.check_in_guest(@guest1)
     assert_equal([@guest1], @room1.guests)
   end
 
+  def test_check_in_guest__guest_doesnt_have_wristband
+    @room1.check_in_guest(@guest1)
+    assert_equal([], @room1.guests)
+  end
+
   def test_check_out_guest
+    @venue1.charge_entry_fee(@guest1)
+    @venue1.charge_entry_fee(@guest2)
     @room1.check_in_guest(@guest1)
     @room1.check_in_guest(@guest2)
     @room1.check_out_guest(@guest1)
@@ -77,6 +95,13 @@ class TestRoom < Minitest::Test
 
   def test_room_is_full
     assert_equal(true, @room1.room_has_space?)
+    @venue1.charge_entry_fee(@guest1)
+    @venue1.charge_entry_fee(@guest2)
+    @venue1.charge_entry_fee(@guest3)
+    @venue1.charge_entry_fee(@guest4)
+    @venue1.charge_entry_fee(@guest5)
+    @venue1.charge_entry_fee(@guest6)
+
     @room1.check_in_guest(@guest1)
     @room1.check_in_guest(@guest2)
     @room1.check_in_guest(@guest3)
@@ -87,6 +112,13 @@ class TestRoom < Minitest::Test
   end
 
   def test_check_in_guest__room_full
+  @venue1.charge_entry_fee(@guest1)
+  @venue1.charge_entry_fee(@guest2)
+  @venue1.charge_entry_fee(@guest3)
+  @venue1.charge_entry_fee(@guest4)
+  @venue1.charge_entry_fee(@guest5)
+  @venue1.charge_entry_fee(@guest6)
+  @venue1.charge_entry_fee(@guest7)
     @room1.check_in_guest(@guest1)
     @room1.check_in_guest(@guest2)
     @room1.check_in_guest(@guest3)

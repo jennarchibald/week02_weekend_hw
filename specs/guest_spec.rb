@@ -32,6 +32,12 @@ class TestGuest < Minitest::Test
    assert_equal(100, @guest1.how_much_money)
  end
 
+ def test_guest_has_wristband
+   assert_equal(false, @guest1.wristband)
+   @guest1.wristband = true
+   assert_equal(true, @guest1.wristband)
+ end
+ 
 
 
 

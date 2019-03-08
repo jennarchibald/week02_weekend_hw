@@ -1,7 +1,8 @@
 class Venue
 
-  attr_reader :entry_fee
-  def initialize(entry_fee)
+  attr_reader :entry_fee, :rooms
+  def initialize(entry_fee, rooms)
+    @rooms = rooms
     @entry_fee = entry_fee
     @till = 0
   end
@@ -15,6 +16,14 @@ class Venue
   end
 
   def charge_entry_fee(guest)
-    guest.spend_money(@entry_fee)
+    income = guest.spend_money(@entry_fee)
+     give_guest_wristband(guest) if income != 0
+     @till += income
   end
+
+  def give_guest_wristband(guest)
+    guest.wristband = true
+  end
+
+
 end

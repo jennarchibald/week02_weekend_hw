@@ -29,7 +29,7 @@ class Room
   end
 
   def check_in_guest(guest)
-    @guests.push(guest) if room_has_space?()
+    @guests.push(guest) if room_has_space?() && guest.wristband == true
   end
 
   def check_out_guest(guest)
