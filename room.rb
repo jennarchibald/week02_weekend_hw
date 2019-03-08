@@ -1,14 +1,16 @@
 class Room
 
-  attr_reader :name, :guests, :song_library, :playlist
+  attr_reader :name, :guests, :capacity, :song_library, :playlist
 
-  def initialize(name, song_library)
+  def initialize(name, song_library, capacity)
 
     @name = name
 
-    @guests = []
-
     @song_library = song_library
+
+    @capacity = capacity
+
+    @guests = []
 
     @playlist = []
 
@@ -27,7 +29,15 @@ class Room
   end
 
   def check_in_guest(guest)
-    
+    @guests.push(guest) if room_has_space?()
+  end
+
+  def check_out_guest(guest)
+    @guests.delete(guest)
+  end
+
+  def room_has_space?()
+    @guests.length < @capacity
   end
 
 end
