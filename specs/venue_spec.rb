@@ -9,19 +9,19 @@ class TestVenue < Minitest::Test
 
   def setup
 
-    @guest1 = Guest.new("Jenn", 100)
-    @guest2 = Guest.new("Bob", 1)
-
     @song1 = Song.new("Mr Brightside", "The Killers")
     @song2 = Song.new("Hard Times", "Paramore")
     @song3 = Song.new("Toxic", "Britney Spears")
     @song4 = Song.new("Fire Drills", "Dessa")
 
+    @guest1 = Guest.new("Jenn", 100, @song1)
+    @guest2 = Guest.new("Bob", 1, @song2)
+
     @songs = [@song1, @song2, @song3]
 
     @room1 = Room.new("Room 1", @songs, 6)
-    @room2 = Room.new("Room 1", @songs, 8)
-    @room3 = Room.new("Room 1", @songs, 8)
+    @room2 = Room.new("Room 2", @songs, 8)
+    @room3 = Room.new("Room 3", @songs, 8)
 
     @rooms = [@room1, @room2, @room3]
 
@@ -52,6 +52,7 @@ class TestVenue < Minitest::Test
     result = @venue1.charge_entry_fee(@guest2)
     assert_equal(false, @guest2.wristband)
     assert_equal(0, @venue1.how_much_in_till)
+    assert_equal("Entry costs 5", result)
   end
 
   def test_venue_has_rooms

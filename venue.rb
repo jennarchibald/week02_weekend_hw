@@ -17,8 +17,13 @@ class Venue
 
   def charge_entry_fee(guest)
     income = guest.spend_money(@entry_fee)
-     give_guest_wristband(guest) if income != 0
-     @till += income
+      if income == @entry_fee
+        give_guest_wristband(guest)
+        add_to_till(income)
+      else
+        return "Entry costs #{@entry_fee}"
+      end
+
   end
 
   def give_guest_wristband(guest)
