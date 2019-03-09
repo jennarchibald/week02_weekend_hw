@@ -55,17 +55,6 @@ class Bar
     end
   end
 
-  def pay_off_tab(guest, payer)
-    bartab = find_bartab(guest)
-    if bartab == nil
-      return "There's no tab for that person"
-    else
-      amount_to_pay = bartab.how_much_spent
-      paid = payer.spend_money(amount_to_pay)
-      bartab.reduce_debt(paid)
-      return "#{guest.name}'s tab is paid."
-    end
 
-  end
 
 end

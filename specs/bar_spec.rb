@@ -14,7 +14,6 @@ class TestBar < MiniTest::Test
 
     @guest1 = Guest.new("Jenn", 100, @song1)
     @guest2 = Guest.new("Bob", 1, @song1)
-    @guest3 = Guest.new("Adam", 50, @song1)
 
     @drink1 = Drink.new("Beer", 3)
     @drink2 = Drink.new("Whiskey", 5)
@@ -106,30 +105,5 @@ class TestBar < MiniTest::Test
     assert_equal("You don't have a bartab.", result)
   end
 
-  def test_pay_off_tab__tab_exists()
-    @bar1.add_tab(@guest1, @bartab1)
-    @bar1.buy_drink_on_tab(@guest1, @drink1)
-    result = @bar1.pay_off_tab(@guest1, @guest1)
-    assert_equal(true, @bartab1.tab_is_settled?)
-    assert_equal(97, @guest1.how_much_money)
-    assert_equal("Jenn's tab is paid.", result)
-  end
-
-  def test_pay_off_tab__tab_doesnt_exist()
-    result = @bar1.pay_off_tab(@guest1, @guest1)
-    assert_equal("There's no tab for that person", result)
-    assert_equal(100, @guest1.how_much_money)
-  end
-
-  def test_pay_off_tab__other_persons_tab()
-    @bar1.add_tab(@guest1, @bartab1)
-    @bar1.buy_drink_on_tab(@guest1, @drink1)
-    result = @bar1.pay_off_tab(@guest1, @guest3)
-    assert_equal(100, @guest1.how_much_money)
-    assert_equal(47, @guest3.how_much_money)
-    assert_equal(true, @bartab1.tab_is_settled?)
-    assert_equal("Jenn's tab is paid.", result)
-
-  end
 
 end
