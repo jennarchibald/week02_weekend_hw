@@ -4,6 +4,8 @@ require_relative("../room")
 require_relative("../song")
 require_relative("../guest")
 require_relative("../venue")
+require_relative("../bar")
+require_relative("../drink")
 
 
 class TestRoom < Minitest::Test
@@ -32,7 +34,11 @@ class TestRoom < Minitest::Test
 
     @rooms = [@room1, @room2]
 
-    @venue1 = Venue.new(5, @rooms)
+    @drinks = [@drink1, @drink2, @drink3]
+
+    @bar1 = Bar.new(@drinks)
+
+    @venue1 = Venue.new(5, @rooms, @bar1)
 
 
 

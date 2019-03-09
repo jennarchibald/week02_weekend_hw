@@ -4,6 +4,10 @@ require_relative("../venue")
 require_relative("../guest")
 require_relative("../room")
 require_relative("../song")
+require_relative("../bar_tab")
+require_relative("../bar")
+require_relative("../drink")
+
 
 class TestVenue < Minitest::Test
 
@@ -25,7 +29,18 @@ class TestVenue < Minitest::Test
 
     @rooms = [@room1, @room2, @room3]
 
-    @venue1 = Venue.new(5, @rooms)
+    @drink1 = Drink.new("Beer", 3)
+    @drink2 = Drink.new("Whiskey", 5)
+    @drink3 = Drink.new("Cider", 2)
+
+    @drinks = [@drink1, @drink2, @drink3]
+
+    @bar1 = Bar.new(@drinks)
+
+    @bartab1 = BarTab.new(@guest1)
+
+    @venue1 = Venue.new(5, @rooms, @bar1)
+
 
   end
 
@@ -64,6 +79,18 @@ class TestVenue < Minitest::Test
     assert_equal(true, @guest1.wristband)
   end
 
+  def test_venue_has_bar
+    assert_equal(@bar1, @venue1.bar)
+  end
+
+  def test_guest_can_leave()
+    assert_equal(true, @venue1.guest_can_leave?(@guest1))
+    @bar1.add_tab(@guest1, @bartab1)
+    @bar1.buy_drink_on_tab(@guest1, @drink1)
+    assert_equal(false, @venue1.guest_can_leave?(@guest1))
+    @bar1.pay_off_tab(@guest1, @guest1)
+    assert_equal(true, @venue1.guest_can_leave?(@guest1))
+  end
 
 
 
