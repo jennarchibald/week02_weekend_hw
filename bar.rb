@@ -19,7 +19,7 @@ class Bar
     elsif guest.wristband == false
       return "Guest has no wristband"
     else
-      @bartabs[guest.name] = BarTab.new(guest)
+      @bartabs[guest] = BarTab.new(guest)
       return "Tab started for #{guest.name}"
     end
   end
@@ -29,12 +29,12 @@ class Bar
   end
 
   def guest_has_tab?(guest)
-    @bartabs.keys.any? {|owner| owner == guest.name}
+    @bartabs.keys.any? {|owner| owner == guest}
   end
 
   def find_bartab(guest)
     if guest_has_tab?(guest)
-      return @bartabs[guest.name]
+      return @bartabs[guest]
     end
   end
 
