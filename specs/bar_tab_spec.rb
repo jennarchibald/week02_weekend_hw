@@ -20,7 +20,7 @@ class TestBarTab < MiniTest::Test
   end
 
   def test_bartab_has_guest
-    assert_equal(@guest1, @bartab1.guest)
+    assert_equal("Jenn", @bartab1.guest)
   end
 
   def test_bartab_has_limit
@@ -32,12 +32,12 @@ class TestBarTab < MiniTest::Test
   end
 
   def test_bartab_how_much_spent
-    assert_equal(0, @bartab1.how_much_spent)
+    assert_equal(0, @bartab1.how_much_owed)
   end
 
   def test_bartab_can_increase_spent()
     @bartab1.increase_spent(10)
-    assert_equal(10, @bartab1.how_much_spent)
+    assert_equal(10, @bartab1.how_much_owed)
   end
 
   def test_how_much_left()
@@ -48,20 +48,20 @@ class TestBarTab < MiniTest::Test
 
   def test_bartab_can_be_spent__enough_left()
     result = @bartab1.spend_bartab(10)
-    assert_equal(10, @bartab1.how_much_spent)
+    assert_equal(10, @bartab1.how_much_owed)
     assert_equal("90 left", result)
   end
 
   def test_bartab_can_be_spent__not_enough()
     result = @bartab1.spend_bartab(101)
-    assert_equal(0, @bartab1.how_much_spent)
+    assert_equal(0, @bartab1.how_much_owed)
     assert_equal("Not enough left", result)
   end
 
   def test_reduce_debt
     @bartab1.spend_bartab(50)
     @bartab1.reduce_debt(10)
-    assert_equal(40, @bartab1.how_much_spent)
+    assert_equal(40, @bartab1.how_much_owed)
   end
 
 
@@ -71,6 +71,12 @@ class TestBarTab < MiniTest::Test
     assert_equal(false, @bartab1.tab_is_settled?)
     @bartab1.reduce_debt(10)
     assert_equal(true, @bartab1.tab_is_settled?)
+  end
+
+  def test_bartab_has_total_spent
+    @bartab1.spend_bartab(90)
+    @bartab1.reduce_debt(50)
+    assert_equal(90, @bartab1.how_much_spent)
   end
 
 

@@ -15,11 +15,7 @@ class TestRoom < Minitest::Test
     @guest1 = Guest.new("Jenn", 100, @song1)
     @guest2 = Guest.new("Becky", 90, @song2)
     @guest3 = Guest.new("Pim", 90, @song3)
-    @guest4 = Guest.new("Alisdair", 90, @song4)
-    @guest5 = Guest.new("Mark", 90, @song3)
-    @guest6 = Guest.new("Charlie", 90, @song2)
-    @guest7 = Guest.new("Grant", 90, @song1)
-    @guest8 = Guest.new("Bob", 1, @song2)
+
 
 
     @song1 = Song.new("Mr Brightside", "The Killers")
@@ -32,13 +28,13 @@ class TestRoom < Minitest::Test
     @room1 = Room.new("Room 1", @songs, 6)
     @room2 = Room.new("Room 2", @songs, 4)
 
-    @rooms = [@room1, @room2]
+    # @rooms = [@room1, @room2]
 
-    @drinks = [@drink1, @drink2, @drink3]
+    # @drinks = [@drink1, @drink2, @drink3]
 
-    @bar1 = Bar.new(@drinks)
+    # @bar1 = Bar.new(@drinks)
 
-    @venue1 = Venue.new(5, @rooms, @bar1)
+    # @venue1 = Venue.new(5, @rooms, @bar1)
 
 
 
@@ -75,24 +71,12 @@ class TestRoom < Minitest::Test
     assert_equal([], @room1.playlist)
   end
 
-  def test_check_in_guest__guest_has_wristband
-    @venue1.charge_entry_fee(@guest1)
-    @room1.check_in_guest(@guest1)
-    assert_equal([@guest1], @room1.guests)
-  end
 
-  def test_check_in_guest__guest_doesnt_have_wristband
-    result = @room1.check_in_guest(@guest1)
-    assert_equal([], @room1.guests)
-    assert_equal("Guest needs a wristband", result)
-  end
-
-  def test_check_out_guest
-    @venue1.charge_entry_fee(@guest1)
-    @venue1.charge_entry_fee(@guest2)
-    @room1.check_in_guest(@guest1)
-    @room1.check_in_guest(@guest2)
-    @room1.check_out_guest(@guest1)
+  def test_remove_guest_from_room
+    @room1.add_guest_to_room(@guest1)
+    @room1.add_guest_to_room(@guest2)
+    assert_equal([@guest1, @guest2], @room1.guests)
+    @room1.remove_guest_from_room(@guest1)
     assert_equal([@guest2], @room1.guests)
   end
 
@@ -102,39 +86,13 @@ class TestRoom < Minitest::Test
 
   def test_room_is_full
     assert_equal(true, @room1.room_has_space?)
-    @venue1.charge_entry_fee(@guest1)
-    @venue1.charge_entry_fee(@guest2)
-    @venue1.charge_entry_fee(@guest3)
-    @venue1.charge_entry_fee(@guest4)
-    @venue1.charge_entry_fee(@guest5)
-    @venue1.charge_entry_fee(@guest6)
-
-    @room1.check_in_guest(@guest1)
-    @room1.check_in_guest(@guest2)
-    @room1.check_in_guest(@guest3)
-    @room1.check_in_guest(@guest4)
-    @room1.check_in_guest(@guest5)
-    @room1.check_in_guest(@guest6)
+    @room1.add_guest_to_room(@guest1)
+    @room1.add_guest_to_room(@guest2)
+    @room1.add_guest_to_room(@guest3)
+    @room1.add_guest_to_room(@guest4)
+    @room1.add_guest_to_room(@guest5)
+    @room1.add_guest_to_room(@guest6)
     assert_equal(false, @room1.room_has_space?)
-  end
-
-  def test_check_in_guest__room_full
-  @venue1.charge_entry_fee(@guest1)
-  @venue1.charge_entry_fee(@guest2)
-  @venue1.charge_entry_fee(@guest3)
-  @venue1.charge_entry_fee(@guest4)
-  @venue1.charge_entry_fee(@guest5)
-  @venue1.charge_entry_fee(@guest6)
-  @venue1.charge_entry_fee(@guest7)
-    @room1.check_in_guest(@guest1)
-    @room1.check_in_guest(@guest2)
-    @room1.check_in_guest(@guest3)
-    @room1.check_in_guest(@guest4)
-    @room1.check_in_guest(@guest5)
-    @room1.check_in_guest(@guest6)
-    result = @room1.check_in_guest(@guest7)
-    assert_equal([@guest1, @guest2, @guest3, @guest4, @guest5, @guest6], @room1.guests)
-    assert_equal("Room 1 is full.", result)
   end
 
 
@@ -147,4 +105,24 @@ class TestRoom < Minitest::Test
     result = @room1.is_song_in_library?(@song4)
     assert_equal(false, result)
   end
+
+  def test_occupants_in_room
+    result = @room1.occupants_in_room()
+    assert_equal(0, result)
+    @room1.add_guest_to_room(@guest1)
+    @room1.add_guest_to_room(@guest2)
+    @room1.add_guest_to_room(@guest3)
+    result = @room1.occupants_in_room()
+    assert_equal(3, result)
+  end
+
+  def test_guest_in_room
+    result = @room1.guest_in_room?(@guest1)
+    assert_equal(false, result)
+    @room1.add_guest_to_room(@guest1)
+    result = @room1.guest_in_room?(@guest1)
+    assert_equal(true, result)
+  end
+
+
 end

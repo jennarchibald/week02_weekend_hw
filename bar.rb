@@ -1,3 +1,4 @@
+require("pry")
 require_relative("./bar")
 
 class Bar
@@ -12,12 +13,12 @@ class Bar
 
   end
 
-  def add_tab(guest, bartab)
-    if guest == bartab.guest
-      @bartabs[guest] = bartab
-      return "Tab added."
+  def start_new_tab(guest, limit = guest.how_much_money)
+    if guest_has_tab?(guest)
+      return "#{guest.name} has already started a tab"
     else
-      return "#{guest.name} does not own this bartab"
+      @bartabs[guest.name] = BarTab.new(guest)
+      return "Tab started for #{guest.name}"
     end
   end
 
@@ -26,12 +27,12 @@ class Bar
   end
 
   def guest_has_tab?(guest)
-    @bartabs.keys.any? {|owner| owner == guest}
+    @bartabs.keys.any? {|owner| owner == guest.name}
   end
 
   def find_bartab(guest)
     if guest_has_tab?(guest)
-      return @bartabs[guest]
+      return @bartabs[guest.name]
     end
   end
 
@@ -44,6 +45,7 @@ class Bar
     else
       bartab = find_bartab(guest)
       price = drink.price
+      # binding.pry()
     end
 
     result = bartab.spend_bartab(price)

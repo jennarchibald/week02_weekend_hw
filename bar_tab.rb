@@ -3,21 +3,23 @@ require("pry")
 class BarTab
   attr_reader :guest
   def initialize(guest, limit = guest.how_much_money)
-    @guest = guest
+    @guest = guest.name
     @limit = limit
     @debt = 0
+    @total_spent = 0
   end
 
   def what_is_limit()
     return @limit
   end
 
-  def how_much_spent()
+  def how_much_owed()
     return @debt
   end
 
   def increase_spent(amount)
     @debt += amount
+    @total_spent += amount
   end
 
   def how_much_left()
@@ -44,6 +46,10 @@ class BarTab
     else
       return false
     end
+  end
+
+  def how_much_spent()
+    return @total_spent
   end
 
 end
