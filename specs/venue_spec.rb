@@ -76,6 +76,14 @@ class TestVenue < Minitest::Test
     assert_equal("Entry costs 5", result)
   end
 
+  def test_charge_entry_fee__guest_already_paid
+    @venue1.charge_entry_fee(@guest1)
+    result = @venue1.charge_entry_fee(@guest1)
+    assert_equal(true, @guest1.wristband)
+    assert_equal(5, @venue1.how_much_in_till)
+    assert_equal("Guest already paid", result)
+  end
+
   def test_venue_has_rooms
     assert_equal([@room1, @room2, @room3], @venue1.rooms)
   end

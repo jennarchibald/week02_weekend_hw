@@ -16,6 +16,8 @@ class Bar
   def start_new_tab(guest, limit = guest.how_much_money)
     if guest_has_tab?(guest)
       return "#{guest.name} has already started a tab"
+    elsif guest.wristband == false
+      return "Guest has no wristband"
     else
       @bartabs[guest.name] = BarTab.new(guest)
       return "Tab started for #{guest.name}"

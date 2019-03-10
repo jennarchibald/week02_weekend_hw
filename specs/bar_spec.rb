@@ -39,12 +39,20 @@ class TestBar < MiniTest::Test
   end
 
   def test_start_new_tab
+    @guest2.wristband = true
     result = @bar1.start_new_tab(@guest2)
     assert_equal("Tab started for Bob", result)
     assert_equal(true, @bar1.guest_has_tab?(@guest2))
   end
 
+  def test_start_new_tab__no_wristband
+    result = @bar1.start_new_tab(@guest2)
+    assert_equal("Guest has no wristband", result)
+    assert_equal(false, @bar1.guest_has_tab?(@guest2))
+  end
+
   def test_start_new_tab__tab_exists
+    @guest1.wristband = true
     @bar1.start_new_tab(@guest1)
     assert_equal(true, @bar1.guest_has_tab?(@guest1))
     @bar1.buy_drink_on_tab(@guest1, @drink1)
@@ -65,24 +73,28 @@ class TestBar < MiniTest::Test
   end
 
   def test_guest_has_tab
+    @guest1.wristband = true
     @bar1.start_new_tab(@guest1, @bartab1)
     assert_equal(true, @bar1.guest_has_tab?(@guest1))
     assert_equal(false, @bar1.guest_has_tab?(@guest2))
   end
 
   def test_find_bartab__guest_has_bartab()
+    @guest1.wristband = true
     @bar1.start_new_tab(@guest1)
     result = @bar1.find_bartab(@guest1)
     assert_equal("Jenn", result.guest)
   end
 
   def test_find_bartab__guest_doesnt_have_bartab()
+    @guest1.wristband = true
     @bar1.start_new_tab(@guest1)
     result = @bar1.find_bartab(@guest2)
     assert_nil(result)
   end
 
   def test_buy_drink_on_tab()
+    @guest1.wristband = true
     @bar1.start_new_tab(@guest1)
     result = @bar1.buy_drink_on_tab(@guest1, @drink1)
     assert_equal(97, @bar1.bartabs["Jenn"].how_much_left)
@@ -90,6 +102,7 @@ class TestBar < MiniTest::Test
   end
 
   def test_buy_drink_on_tab__drink_not_served()
+    @guest1.wristband = true
     @bar1.start_new_tab(@guest1)
     result = @bar1.buy_drink_on_tab(@guest1, @drink4)
     assert_equal(100, @bartab1.how_much_left)
@@ -97,6 +110,7 @@ class TestBar < MiniTest::Test
   end
 
   def test_buy_drink_on_tab__not_enough_left()
+    @guest2.wristband = true
     @bar1.start_new_tab(@guest2)
     result = @bar1.buy_drink_on_tab(@guest2, @drink1)
     assert_equal(1, @bartab2.how_much_left)
@@ -104,7 +118,8 @@ class TestBar < MiniTest::Test
   end
 
   def test_buy_drink_on_tab__guest_has_no_tab()
-    @bar1.start_new_tab(@guest2, @bartab2)
+    @guest2.wristband = true
+    @bar1.start_new_tab(@guest2)
     result = @bar1.buy_drink_on_tab(@guest1, @drink1)
     assert_equal(1, @bartab2.how_much_left)
     assert_equal("You don't have a bartab.", result)

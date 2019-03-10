@@ -17,6 +17,9 @@ class Venue
   end
 
   def charge_entry_fee(guest)
+
+    return "Guest already paid" if guest.wristband == true
+
     income = guest.spend_money(@entry_fee)
       if income == @entry_fee
         give_guest_wristband(guest)
