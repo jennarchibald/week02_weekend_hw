@@ -99,7 +99,8 @@ class TestVenue < Minitest::Test
 
   def test_guest_can_leave()
     assert_equal(true, @venue1.guest_can_leave?(@guest1))
-    @bar1.start_new_tab(@guest1)
+    @venue1.charge_entry_fee(@guest1)
+    @bar1.start_new_tab(@guest1, 100)
     @bar1.buy_drink_on_tab(@guest1, @drink1)
     assert_equal(false, @venue1.guest_can_leave?(@guest1))
     @venue1.pay_off_bar_tab(@bar1, @guest1, @guest1)
@@ -107,13 +108,14 @@ class TestVenue < Minitest::Test
   end
 
   def test_pay_off__bar_tab__tab_exists()
+    @venue1.charge_entry_fee(@guest1)
     @bar1.start_new_tab(@guest1)
     @bar1.buy_drink_on_tab(@guest1, @drink1)
     result = @venue1.pay_off_bar_tab(@bar1, @guest1, @guest1)
     assert_equal(true, @bartab1.tab_is_settled?)
-    assert_equal(97, @guest1.how_much_money)
+    assert_equal(92, @guest1.how_much_money)
     assert_equal("Jenn's tab is paid.", result)
-    assert_equal(3, @venue1.how_much_in_till)
+    assert_equal(8, @venue1.how_much_in_till)
   end
 
   def test_pay_off_bar_tab__tab_doesnt_exist()
@@ -124,25 +126,27 @@ class TestVenue < Minitest::Test
   end
 
   def test_pay_off_bar_tab__other_persons_tab()
+    @venue1.charge_entry_fee(@guest1)
     @bar1.start_new_tab(@guest1)
     @bar1.buy_drink_on_tab(@guest1, @drink1)
     result = @venue1.pay_off_bar_tab(@bar1, @guest1, @guest3)
-    assert_equal(100, @guest1.how_much_money)
+    assert_equal(95, @guest1.how_much_money)
     assert_equal(47, @guest3.how_much_money)
     assert_equal(true, @bartab1.tab_is_settled?)
     assert_equal("Jenn's tab is paid.", result)
-    assert_equal(3, @venue1.how_much_in_till)
+    assert_equal(8, @venue1.how_much_in_till)
   end
 
   def test_pay_off_bar_tab__not_enough_money()
+    @venue1.charge_entry_fee(@guest1)
     @bar1.start_new_tab(@guest1)
     @bar1.buy_drink_on_tab(@guest1, @drink1)
     result = @venue1.pay_off_bar_tab(@bar1, @guest1, @guest2)
-    assert_equal(100, @guest1.how_much_money)
+    assert_equal(95, @guest1.how_much_money)
     assert_equal(1, @guest2.how_much_money)
-    assert_equal(false, @bar1.bartabs["Jenn"].tab_is_settled?)
+    assert_equal(false, @bar1.bartabs[@guest1].tab_is_settled?)
     assert_equal("Not enough money", result)
-    assert_equal(0, @venue1.how_much_in_till)
+    assert_equal(5, @venue1.how_much_in_till)
   end
 
   def test_guest_checked_in

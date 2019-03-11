@@ -14,6 +14,7 @@ class Bar
   end
 
   def start_new_tab(guest, limit = guest.how_much_money)
+    # binding.pry()
     if guest_has_tab?(guest)
       return "#{guest.name} has already started a tab"
     elsif guest.wristband == false

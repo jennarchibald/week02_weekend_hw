@@ -1,3 +1,5 @@
+require("pry")
+
 class Venue
 
   attr_reader :entry_fee, :rooms, :bar
@@ -35,6 +37,7 @@ class Venue
   end
 
   def guest_can_leave?(guest)
+    # binding.pry()
     guest_bartab = @bar.find_bartab(guest)
     return true if guest_bartab.nil?
     return guest_bartab.tab_is_settled?
